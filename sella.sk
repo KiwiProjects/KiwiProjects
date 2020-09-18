@@ -1,0 +1,53 @@
+      #========================#     
+      #      Created By        #
+      #    @KiwiStory on TG    #
+      #========================#
+
+
+# Versione: 1.0
+
+
+# Link: https://www.spigotmc.org/members/idel.1003468/
+
+# ==================================================== NON MODIFICARE OLTRE QUESTA LINEA ==================================================== #
+
+options:
+  Permesso: vdf.sella
+  Raggio: 4
+  Messaggiopresa: &aHai preso tra la mani &2%clicked player%
+  Messaggiopreso: &2%player% &ati ha preso tra le mani
+  NessunPerm: &4[#] &cNessun permesso.
+  Lontano: &4&lVIGILE DEL FUOCO &8• &cIl civile è troppo lontano!
+  
+on rightclick on a player:
+  if player's tool is saddle named "&4Vigile del Fuoco":
+    if player has permission "{@Permesso}":
+      if distance between clicked player and player is smaller than {@Raggio}:
+        if passenger of the player is not clicked player:      
+          set {vdf.%player%} to true      
+          make the clicked player ride the player
+          send "&a{@Messaggiopresa}" to player
+          send "{@Messaggiopreso}" to clicked player  
+        else:
+          send "&cQuesta persona è già tra le tue mani!" to player
+      else:
+        send "{@Lontano}" to player        
+    else:
+      send "{@NessunPerm}" to player  
+      
+on command "/sella":
+  cancel event
+  give saddle named "&4Vigile del Fuoco" to player
+
+on dismount:
+  if {vdf.%player%} is true:
+    send "&cSei sceso dalle braccia della Vigile" to player
+    delete {vdf.%player%}
+
+command /sellainfo:
+	usage: &4&l[!] &7/sellainfo
+	trigger:
+            message "&6&lSella &4&lVDF &f| &7INFO"
+            message ""
+            message "&7Creato da Idel"
+            message "&7Versione 1.0"
